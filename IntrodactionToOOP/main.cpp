@@ -40,7 +40,8 @@ double distance(Point A, Point B)
 	return distance;
 }
 //#define STRUCT_POINT
-#define DISTENCE_CHEK
+#define DISTANCE_CHECK
+
 void main()
 {
 	setlocale(LC_ALL, "");
@@ -58,10 +59,8 @@ void main()
 	Point* pA = &A;
 	cout << pA->x << "\t" << pA->y << endl;
 #endif
-#ifdef DISTENCE_CHEK
 
-
-
+#ifdef DISTANCE_CHECK
 	Point A;
 	A.set_x(2);
 	A.set_y(3);
@@ -75,7 +74,7 @@ void main()
 	cout << "Растояние от точки 'A' до точки 'B': " << A.distance(B) << endl;
 	cout << "Растояние от точки 'B' до точки 'A': " << B.distance(A) << endl;
 	cout << "Растояние между точками 'A' и 'B':   " << distance(A,B) << endl;
-#endif  DISTENCE_CHEK
+#endif  DISTENCE_CHECK
 
 }
 
