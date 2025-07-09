@@ -20,7 +20,7 @@ public:
 	{
 		return numerator;
 	}
-	int get_denomiratir()const
+	int get_denominator()const
 	{
 		return denominator;
 	}
@@ -44,7 +44,7 @@ public:
 		this->denominator = 1;
 		cout << "DefaultConstructor:\t" << this << endl;
 	}
-	Fraction(int integer)
+	explicit Fraction(int integer)
 	{
 		this->integer = integer;
 		this->numerator = 0;
@@ -66,7 +66,7 @@ public:
 		this->integer = integer;
 		this->numerator = numerator;
 		this->set_denominator(denominator);
-		cout << "Destructor:\t\t" << this << endl;
+		cout << "Constructor:\t\t" << this << endl;
 	}
 	Fraction(const Fraction& other)
 	{
@@ -109,7 +109,25 @@ public:
 		Fraction old = *this;
 		integer++;
 		return old;
+	}Fraction& operator--()
+	{
+		integer--;
+		return *this;
 	}
+
+	Fraction operator--(int)
+	{
+		Fraction old = *this;
+		integer--;
+		return old;
+	}
+
+	explicit operator int()const
+	{
+		//to_improper();
+		return integer + numerator / denominator;
+	}
+
 
 	Fraction& to_improper()
 	{
@@ -170,8 +188,8 @@ Fraction operator+(Fraction left, Fraction right)
 	right.to_improper();
 	return Fraction
 	(
-		left.get_numerator() * right.get_denomiratir() + right.get_numerator() * left.get_denomiratir(),
-		left.get_denomiratir() * right.get_denomiratir()
+		left.get_numerator() * right.get_denominator() + right.get_numerator() * left.get_denominator(),
+		left.get_denominator() * right.get_denominator()
 	);
 }
 
@@ -194,7 +212,7 @@ Fraction operator*(Fraction left, Fraction right)
 	return Fraction
 	(
 		left.get_numerator() * right.get_numerator(),
-		left.get_denomiratir() * right.get_denomiratir()
+		left.get_denominator() * right.get_denominator()
 	).to_proper().reduce();
 }
 Fraction operator/(const Fraction& left, const Fraction& right)
@@ -207,8 +225,8 @@ bool operator ==(Fraction left, Fraction right)
 	left.to_improper();
 	right.to_improper();
 	return
-		left.get_numerator() * right.get_denomiratir() ==
-		right.get_numerator() * left.get_denomiratir();
+		left.get_numerator() * right.get_denominator() ==
+		right.get_numerator() * left.get_denominator();
 }
 
 bool operator!=(const Fraction& left, const Fraction& right)
@@ -220,16 +238,16 @@ bool operator>(Fraction left, Fraction right)
 	left.to_improper();
 	right.to_improper();
 	return
-		left.get_numerator() * right.get_denomiratir() >
-		right.get_numerator() * left.get_denomiratir();
+		left.get_numerator() * right.get_denominator() >
+		right.get_numerator() * left.get_denominator();
 }
 bool operator<(Fraction left, Fraction right)
 {
 	left.to_improper();
 	right.to_improper();
 	return
-		left.get_numerator()*right.get_denomiratir() <
-		right.get_numerator()*left.get_denomiratir();
+		left.get_numerator()*right.get_denominator() <
+		right.get_numerator()*left.get_denominator();
 }
 bool operator>=(const Fraction& left, const Fraction& right)
 {
@@ -241,11 +259,27 @@ bool operator<=(const Fraction& left, const Fraction& right)
 	//return left < right || left == right;
 }
 
+std::ostream& operator << (std::ostream& os, const Fraction& obj)
+{
+	if (obj.get_integer())os << obj.get_integer();
+	if (obj.get_numerator())
+	{
+		if (obj.get_integer())os << "(";
+		os << obj.get_numerator() << "/" << obj.get_denominator();
+		if (obj.get_integer())os << ")";
+	}
+	else if (obj.get_integer() == 0)os << 0;
+	return os;
+}
 
 //#define CONSTRUCTORS_CHEK
 //#define AITHMETICAL_OPERATORS_CHECK
 //#define INCREMENTO_DECREMENTO_CECK
-
+//#define COMPERISON_OPERATORS
+//#define STREAMS_CHECK
+//#define CONVERSION_FROM_OTHER_TO_CLASS
+//#define CONVERSION_FROM_CLASS_TO_OTHER
+#define HAVE_A_NICI_DAY
 
 void main()
 {
@@ -309,8 +343,56 @@ void main()
 	B.print();
 #endif //INCREMENTO_DECREMENTO_CECK
 
+#ifdef COMPERISON_OPERATORS
+
+
+
 	cout << (2 == 3) << endl;
 	cout << (Fraction(1, 2) <= Fraction(5, 11)) << endl;
+
+#endif // COMPERISON_OPERATORS
+
+#ifdef STREAMS_CHECK
+
+	Fraction A(2, 3, 4);
+	cout << "¬ведите простую дробь: ";
+	cin >> A;
+	cout << A << endl;
+
+#endif // STREAMS_CHECK
+
+#ifdef CONVERSION_FROM_OTHER_TO_CLASS
+
+
+
+	Fraction A = (Fraction)5;
+	cout << A << endl;
+
+	Fraction B;
+	B = Fraction(8);
+
+#endif // CONVERSION_FROM_OTHER_TO_CLASS
+
+
+#ifdef CONVERSION_FROM_CLASS_TO_OTHER
+
+	Fraction A(2, 3, 4);
+	A.to_improper().print();
+	int a = (int)A;
+	cout << a << endl;
+
+	double b = A;
+	cout << b << endl;
+
+
+#endif // CONVERSION_FROM_CLASS_TO_OTHER
+
+#ifdef HAVE_A_NICI_DAY
+
+	Fraction A = 2.75;
+	cout << A << endl;
+
+#endif // HAVE_A_NICI_DAY
 
 
 }
