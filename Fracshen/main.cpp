@@ -202,8 +202,48 @@ Fraction operator/(const Fraction& left, const Fraction& right)
 	return left * right.inverted();
 }
 
+bool operator ==(Fraction left, Fraction right)
+{
+	left.to_improper();
+	right.to_improper();
+	return
+		left.get_numerator() * right.get_denomiratir() ==
+		right.get_numerator() * left.get_denomiratir();
+}
+
+bool operator!=(const Fraction& left, const Fraction& right)
+{
+	return!(left == right);
+}
+bool operator>(Fraction left, Fraction right)
+{
+	left.to_improper();
+	right.to_improper();
+	return
+		left.get_numerator() * right.get_denomiratir() >
+		right.get_numerator() * left.get_denomiratir();
+}
+bool operator<(Fraction left, Fraction right)
+{
+	left.to_improper();
+	right.to_improper();
+	return
+		left.get_numerator()*right.get_denomiratir() <
+		right.get_numerator()*left.get_denomiratir();
+}
+bool operator>=(const Fraction& left, const Fraction& right)
+{
+	return left > right || left == right;
+}
+bool operator<=(const Fraction& left, const Fraction& right)
+{
+	return!(left > right);
+	//return left < right || left == right;
+}
+
+
 //#define CONSTRUCTORS_CHEK
-#define AITHMETICAL_OPERATORS_CHECK
+//#define AITHMETICAL_OPERATORS_CHECK
 //#define INCREMENTO_DECREMENTO_CECK
 
 
@@ -226,7 +266,7 @@ void main()
 	D.print();
 	
 
-#endif CONSTRUCTORS_CHEK
+#endif //CONSTRUCTORS_CHEK
 
 #ifdef  AITHMETICAL_OPERATORS_CHECK
 	double a = 2.7;
@@ -252,7 +292,7 @@ void main()
 
 	C = A + B;
 	C.print();
-#endif  AITHMETICAL_OPERATORS_CHECK
+#endif // AITHMETICAL_OPERATORS_CHECK
 
 #ifdef INCREMENTO_DECREMENTO_CECK
 
@@ -267,7 +307,10 @@ void main()
 	B *= A++;
 	A.print();
 	B.print();
-#endif INCREMENTO_DECREMENTO_CECK
+#endif //INCREMENTO_DECREMENTO_CECK
+
+	cout << (2 == 3) << endl;
+	cout << (Fraction(1, 2) <= Fraction(5, 11)) << endl;
 
 
 }
