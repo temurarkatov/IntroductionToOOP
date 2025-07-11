@@ -141,6 +141,10 @@ public:
 		return integer + numerator / denominator;
 	}
 
+	operator double()const
+	{
+		return integer + (double)numerator / denominator;
+	}
 
 	Fraction& to_improper()
 	{
@@ -292,8 +296,8 @@ std::ostream& operator << (std::ostream& os, const Fraction& obj)
 //#define COMPERISON_OPERATORS
 //#define STREAMS_CHECK
 //#define CONVERSION_FROM_OTHER_TO_CLASS
-//#define CONVERSION_FROM_CLASS_TO_OTHER
-#define HAVE_A_NICI_DAY
+#define CONVERSION_FROM_CLASS_TO_OTHER
+//#define HAVE_A_NICI_DAY
 
 void main()
 {
