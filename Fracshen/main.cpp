@@ -279,6 +279,7 @@ bool operator<=(const Fraction& left, const Fraction& right)
 
 std::ostream& operator << (std::ostream& os, const Fraction& obj)
 {
+
 	if (obj.get_integer())os << obj.get_integer();
 	if (obj.get_numerator())
 	{
@@ -289,19 +290,44 @@ std::ostream& operator << (std::ostream& os, const Fraction& obj)
 	else if (obj.get_integer() == 0)os << 0;
 	return os;
 }
+std::istream& operator>>(std::istream& is, Fraction& obj)
+{
+	const int SIZE = 256;
+	char buffer[SIZE] = {};
+	//is >> buffer;
+	is.getline(buffer, SIZE);
+	int n = 0;
+	const char delimiters[] = "(/, )";
+	int numbers[3] = {};
+	for (
+		char* pch = strtok(buffer, delimiters);
+		pch && n<3;
+		pch=strtok(NULL, delimiters))
+		numbers[n++] = atoi(pch);
+	//for (int i = 0; i < n; i++)cout << numbers[i] << "\t";cout << endl;
+	switch (n)
+	{
+	case 0: obj = Fraction(); break;
+	case 1: obj = Fraction(numbers[0]); break;
+	case 2: obj = Fraction(numbers[0], numbers[1]); break;
+	case 3: obj = Fraction(numbers[0], numbers[1], numbers[2]); break;
+
+	}
+	return is;
+}
 
 //#define CONSTRUCTORS_CHEK
 //#define AITHMETICAL_OPERATORS_CHECK
 //#define INCREMENTO_DECREMENTO_CECK
 //#define COMPERISON_OPERATORS
-//#define STREAMS_CHECK
+#define STREAMS_CHECK
 //#define CONVERSION_FROM_OTHER_TO_CLASS
-#define CONVERSION_FROM_CLASS_TO_OTHER
+//#define CONVERSION_FROM_CLASS_TO_OTHER
 //#define HAVE_A_NICI_DAY
 
 void main()
 {
-	setlocale(LC_ALL, " ");
+	setlocale(LC_ALL, "");
 
 #ifdef CONSTRUCTORS_CHEK
 	  
