@@ -51,6 +51,19 @@ public:
 		this->denominator = 1;
 		cout << "SingleArgumentConstructor:" << this << endl;
 	}
+	Fraction(double decimal)
+	{
+		integer = decimal;
+		decimal -= integer;
+		denominator = 1e-10;
+		numerator = decimal * denominator;
+		reduce();
+		cout << "SingleArgumentConstructor: " << this << endl;
+
+
+	}
+
+
 	Fraction(int numerator, int denominator)
 	{
 		this->integer = 0;
@@ -159,6 +172,7 @@ public:
 		{
 			rest = more % less;
 			more = less;
+			less = rest;
 		} while (rest);
 		int GCD = more;
 		numerator /= GCD;
