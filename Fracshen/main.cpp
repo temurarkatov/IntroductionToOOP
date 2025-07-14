@@ -320,7 +320,7 @@ std::istream& operator>>(std::istream& is, Fraction& obj)
 //#define AITHMETICAL_OPERATORS_CHECK
 //#define INCREMENTO_DECREMENTO_CECK
 //#define COMPERISON_OPERATORS
-#define STREAMS_CHECK
+//#define STREAMS_CHECK
 //#define CONVERSION_FROM_OTHER_TO_CLASS
 //#define CONVERSION_FROM_CLASS_TO_OTHER
 //#define HAVE_A_NICI_DAY
