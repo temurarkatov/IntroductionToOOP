@@ -44,6 +44,15 @@ public:
 		for (int i = 0; i < size; i++)this->str[i] = str[i];
 		cout << "Constructor:\t\t" << this << endl;
 	}
+	String(String&& other)
+	{
+		this->size = other.size;
+		this->str = other.str;
+
+		other.size = 0;
+		other.str = nullptr;
+		cout << "MoveConstructor:\t" << this << endl;
+	}
 	~String()
 	{
 		delete[] str;
@@ -62,6 +71,18 @@ public:
 		cout << "CopyAssignment:\t\t" << this << endl;
 		return *this;
 	}
+	String& operator=(String&& other)noexcept
+	{
+		if (this == &other)return *this;
+		delete[] str;
+		this->size = other.size;
+		this->str = other.str;
+		other.size = 0;
+		other.str = nullptr;
+		cout << "MoveAssignment:\t\t" << this << endl;
+		return *this;
+	}
+
 	char operator[](int i)const
 	{
 		return str[i];
@@ -100,8 +121,8 @@ void Clear(char* str)
 
 
 }
-//#define CONSTRUCTORS_CHECK
-#define COPY_SEMANTIC_CHEK
+#define CONSTRUCTORS_CHECK
+//#define COPY_SEMANTIC_CHEK
 
 void main()
 {
@@ -121,7 +142,8 @@ void main()
 	cout << str4 << endl;
 
 	cout << delimiter << endl;
-	String str5 = str3 + str4;
+	String str5;
+	str5 = str3 + str4;
 	cout << delimiter << endl;
 	cout << str5 << endl;
 
