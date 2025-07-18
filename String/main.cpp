@@ -3,103 +3,135 @@ using namespace std;
 
 #define delimiter "--------------------------\n"
 
+/////////////////////////////////////////////////////////////////////
+//////////////////   Объявление класса (Class declaration)  ///////////////
+
+
+
+
 class String
 {
 	int size;
 	char* str;
 public:
-	int get_size()const
-	{
-		return size;
-	}
-	const char* get_str()const
-	{
-		return str;
-	}
-	char* get_str()
-	{
-		return str;
-	}
+	int get_size()const;
+	const char* get_str()const;
+	char* get_str();
 
-	explicit String(int size = 80):size(size), str(new char[size] {})
-	{
-		//this->size = size;
-		//this->str = new char[size] {};
-		cout << "DefaultConstructor:\t" << this << endl;
-	}
-	String(const String& other):String(other.str)
-	{
-		//this->size = other.size;
-		//// s->str = other.str;
-		//this->str = new char[size] {};
-		//for (int i = 0; i < size; i++)
-		//	this->str[i] = other.str[i];
-		cout << "CopyConstructor:\t" << this << endl;
-	}
+	explicit String(int size = 80);
+	String(const char* str);
+	String(const String& other);
 
-	String(const char* str):String(strlen(str)+1)
-	{
-		//this->size = strlen(str) + 1;
-		//this->str = new char[size] {};
-		//for (int i = 0; i < size; i++)this->str[i] = str[i];
+	String(String&& other);
+	~String();
 
-		cout << "Constructor:\t\t" << this << endl;
-	}
-	String(String&& other):size(other.size), str(other.str)
-	{
-		//this->size = other.size;
-		//this->str = other.str;
+	String& operator=(const String& other);
+	String& operator=(String&& other);
 
-		other.size = 0;
-		other.str = nullptr;
-		cout << "MoveConstructor:\t" << this << endl;
-	}
-	~String()
-	{
-		delete[] str;
-		str = nullptr;
-		size = 0;
-		cout << "Destructor:\t\t" << this << endl;
-	}
+	char operator[](int i)const;
+	char& operator[](int i);
 
-	String& operator=(const String& other)
-	{
-		if (this == &other)return *this;
-		delete[] this->str;
-		this->size = other.size;
-		this->str = new char[size] {};
-		for (int i = 0; i < size; i++)this->str[i] = other.str[i];
-		cout << "CopyAssignment:\t\t" << this << endl;
-		return *this;
-	}
-	String& operator=(String&& other)noexcept
-	{
-		if (this == &other)return *this;
-		delete[] str;
-		this->size = other.size;
-		this->str = other.str;
-		other.size = 0;
-		other.str = nullptr;
-		cout << "MoveAssignment:\t\t" << this << endl;
-		return *this;
-	}
-
-	char operator[](int i)const
-	{
-		return str[i];
-	}
-	char& operator[](int i)
-	{
-		return str[i];
-	}
-
-	void print()const
-	{
-		cout << "Size:\t" << size << endl;
-		cout << "str:\t" << str << endl;
-
-	}
+	void print()const;
 };
+//////////////////   Конец объявления класса (Class declaration)  ///////////////
+/////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////
+//////////////////   Определениение класса (Class definition)  ///////////////
+
+
+int String::get_size()const
+{
+	return size;
+}
+const char* String::get_str()const
+{
+	return str;
+}
+char* String::get_str()
+{
+	return str;
+}
+
+String::String(int size) :size(size), str(new char[size] {})
+{
+	//this->size = size;
+	//this->str = new char[size] {};
+	cout << "DefaultConstructor:\t" << this << endl;
+}
+String::String(const String& other) :String(other.str)
+{
+	//this->size = other.size;
+	//// s->str = other.str;
+	//this->str = new char[size] {};
+	//for (int i = 0; i < size; i++)
+	//	this->str[i] = other.str[i];
+	cout << "CopyConstructor:\t" << this << endl;
+}
+
+String::String(const char* str) :String(strlen(str) + 1)
+{
+	//this->size = strlen(str) + 1;
+	//this->str = new char[size] {};
+	//for (int i = 0; i < size; i++)this->str[i] = str[i];
+
+	cout << "Constructor:\t\t" << this << endl;
+}
+String::String(String&& other) :size(other.size), str(other.str)
+{
+	//this->size = other.size;
+	//this->str = other.str;
+
+	other.size = 0;
+	other.str = nullptr;
+	cout << "MoveConstructor:\t" << this << endl;
+}
+String::~String()
+{
+	delete[] str;
+	str = nullptr;
+	size = 0;
+	cout << "Destructor:\t\t" << this << endl;
+}
+
+String& String::operator=(const String& other)
+{
+	if (this == &other)return *this;
+	delete[] this->str;
+	this->size = other.size;
+	this->str = new char[size] {};
+	for (int i = 0; i < size; i++)this->str[i] = other.str[i];
+	cout << "CopyAssignment:\t\t" << this << endl;
+	return *this;
+}
+String& String::operator=(String&& other)
+{
+	if (this == &other)return *this;
+	delete[] str;
+	this->size = other.size;
+	this->str = other.str;
+	other.size = 0;
+	other.str = nullptr;
+	cout << "MoveAssignment:\t\t" << this << endl;
+	return *this;
+}
+
+char String::operator[](int i)const
+{
+	return str[i];
+}
+char& String::operator[](int i)
+{
+	return str[i];
+}
+
+void String::print()const
+{
+	cout << "Size:\t" << size << endl;
+	cout << "Str:\t" << str << endl;
+
+}
 String operator+(const String& left, const String& right)
 {
 	String result(left.get_size() + right.get_size() - 1);
@@ -116,6 +148,11 @@ std::ostream& operator<<(std::ostream& os, const String& obj)
 {
 	return os << obj.get_str();
 }
+
+//////////////////   Конец определения класса (Class definition end)  ///////////////
+/////////////////////////////////////////////////////////////////////
+
+
 void Clear(char* str)
 {
 	delete[] str;
