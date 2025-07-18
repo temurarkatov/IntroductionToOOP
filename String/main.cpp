@@ -121,12 +121,16 @@ void Clear(char* str)
 
 
 }
-#define CONSTRUCTORS_CHECK
+//#define CONSTRUCTORS_CHECK
 //#define COPY_SEMANTIC_CHEK
 
 void main()
 {
 	setlocale(LC_ALL, "");
+
+	int a = 2;
+	a = 3;
+
 #ifdef CONSTRUCTORS_CHECK
 	String str1;
 	str1.print();
@@ -178,8 +182,43 @@ void main()
   */
 
 
+	String str1;
+	str1.print();
+
+	String str3 = "Hello";
+	str3.print();
+
+	String str2(5);
+	str2.print();
+
+	String str4();
+	//если есть необходимость явно вызвать конструктор по у
+	//str4  
 
 
-	
+	String str5{};//А эта строка уже явно вызывает 
+	str5.print();
+
+
+	String str6{ 6 };//Singl-ar
+	str6.print();
+
+	String str7{ "World" };
+	str7.print();
+
+	String str8 = str7;
+	str8.print();
+
+	String str9(str8);
+	str9.print();
 	   
+
+	String str10{ str9 };
+	str10.print();
+
+	//!!! Фигурные скобки для вызова конструкторов следует использовать с большой осторожностью
+
+
+
+
 }
