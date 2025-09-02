@@ -71,20 +71,6 @@ public:
 		return *this;
 	}
 
-	Point& operator++()		//Prefix increment
-	{
-		x++;
-		y++;
-		return *this;
-	}
-	Point operator++(int)	//Postfix (Suffix) increment
-	{
-		Point old = *this;	//Сохраняем старое значение объекта
-		x++;
-		y++;
-		return old;
-	}
-
 	//			Methods:
 	double distance(const Point& other)const
 	{
@@ -113,47 +99,9 @@ double distance(const Point& A, const Point& B)
 	return distance;
 }
 
-Point operator+(const Point& left, const Point& right)
-{
-	Point result;
-	result.set_x(left.get_x() + right.get_x());
-	result.set_y(left.get_y() + right.get_y());
-	return result;
-}
-
-bool operator==(const Point& left, const Point& right)
-{
-	/*
-	if (left.get_x() == right.get_x() && left.get_y() == right.get_y())
-		return true;
-	else
-		return false;
-	*/
-
-	/*if (condition)
-	{
-		....;
-		code1;
-		....;
-	}
-	else
-	{
-		....;
-		code2;
-		....;
-	}*/
-	return left.get_x() == right.get_x() && left.get_y() == right.get_y();
-}
-bool operator!=(const Point& left, const Point& right)
-{
-	return !(left == right);
-}
-
 //#define STRUCT_POINT
 //#define DISTANCE_CHECK
 //#define CONSTRUCTORS_CHECK
-//#define ASSIGNMENT_CHECK
-//#define ARITHMETICAL_OPERATORS_CHECK
 
 void main()
 {
@@ -228,9 +176,10 @@ void main()
 
 #endif // CONSTRUCTORS_CHECK
 
-#ifdef ASSIGNMENT_CHECK
 	int a, b, c;
+
 	a = b = c = 0;
+
 	cout << a << "\t" << b << "\t" << c << endl;
 
 	Point A, B, C;
@@ -241,19 +190,4 @@ void main()
 	A.print();
 	B.print();
 	C.print();
-#endif // ASSIGNMENT_CHECK
-
-#ifdef ARITHMETICAL_OPERATORS_CHECK
-	Point A(2, 3);
-	Point B(7, 8);
-	Point C = A + B;
-	C.print();
-
-	A = B++;
-	A.print();
-	B.print();
-#endif // ARITHMETICAL_OPERATORS_CHECK
-
-	cout << (Point(2, 3) != Point(7, 8)) << endl;
-
 }
