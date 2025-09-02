@@ -1,193 +1,172 @@
 ﻿#include<iostream>
 using namespace std;
-using std::cin;
-using std::cout;
-using std::endl;
 
-#define delimiter "\n-------------------------------------------------------\n"
-
-class Point
+class Fraction
 {
-	//Создавая структуру или класс мы создаем новый тип данных (пользовательский тип данных)
-	//Пользовательские типы являются более сложными, поскольку могу включать в себя множество
-	//однотипных или разнотипных значений, которые являются характеристиками и состояниями объектов
-	double x;
-	double y;
+	int integer;		//Целая часть
+	int numerator;		//Числитель
+	int denominator;	//Знаменатель
 public:
-	double get_x()const
+	int get_integer()const
 	{
-		return x;
+		return integer;
 	}
-	double get_y()const
+	int get_numerator()const
 	{
-		return y;
+		return numerator;
 	}
-	void set_x(double x)
+	int get_denominator()const
 	{
-		this->x = x;
-		//l-value = r-value;
+		return denominator;
 	}
-	void set_y(double y)
+	void set_integer(int integer)
 	{
-		this->y = y;
+		this->integer = integer;
+	}
+	void set_numerator(int numerator)
+	{
+		this->numerator = numerator;
+	}
+	void set_denominator(int denominator)
+	{
+		if (denominator == 0)denominator = 1;
+		this->denominator = denominator;
 	}
 
-	//			Constructors;
-	/*Point()
+	//				Constructors:
+	Fraction()
 	{
-		x = y = 0;
+		this->integer = 0;
+		this->numerator = 0;
+		this->denominator = 1;
 		cout << "DefaultConstructor:\t" << this << endl;
-	}*/
-	/*Point(double x)
+	}
+	Fraction(int integer)
 	{
-		this->x = x;
-		this->y = 0;
+		this->integer = integer;
+		this->numerator = 0;
+		this->denominator = 1;
 		cout << "SingleArgumentConstructor:" << this << endl;
-		//Конструктор с одним параметром
-	}*/
-	Point(double x = 0, double y = 0)
+	}
+	Fraction(int numerator, int denominator)
 	{
-		this->x = x;
-		this->y = y;
+		this->integer = 0;
+		this->numerator = numerator;
+		set_denominator(denominator);
 		cout << "Constructor:\t\t" << this << endl;
 	}
-	Point(const Point& other)
+	Fraction(int integer, int numerator, int denominator)
 	{
-		this->x = other.x;
-		this->y = other.y;
+		this->integer = integer;
+		this->numerator = numerator;
+		this->set_denominator(denominator);
+		cout << "Constructor:\t\t" << this << endl;
+	}
+	Fraction(const Fraction& other)
+	{
+		this->integer = other.integer;
+		this->numerator = other.numerator;
+		this->denominator = other.denominator;
 		cout << "CopyConstructor:\t" << this << endl;
 	}
-	~Point()
+	~Fraction()
 	{
-		cout << "Destructor:\t\t" << this << endl;;
+		cout << "Destructor:\t\t" << this << endl;
 	}
 
-	//			Operators:
-	Point& operator=(const Point& other)
+	//					Operators:
+	Fraction& operator=(const Fraction& other)
 	{
-		this->x = other.x;
-		this->y = other.y;
-		cout << "CopyAssignment:\t\t" << this << endl;
+		this->integer = other.integer;
+		this->numerator = other.numerator;
+		this->denominator = other.denominator;
+		cout << "CopyAssignment:\t" << this << endl;
 		return *this;
 	}
 
-	//			Methods:
-	double distance(const Point& other)const
+
+	//					 Methods:
+	Fraction& to_improper()
 	{
-		//this - эта точка (находим расстояние от этой точки);
-		//other - та точка (до указанной точки);
-		//this->x *= 100;		//E0137
-		//other.x *= 100;	//E0137
-		double x_distance = this->x - other.x;
-		double y_distance = this->y - other.y;
-		double distance = sqrt(x_distance * x_distance + y_distance * y_distance);
-		//sqrt() - Square Root (Квадратный корень)
-		return distance;
+		//перевод в неправильную дробь:
+		numerator += integer * denominator;
+		integer = 0;
+		return *this;
+	}
+	Fraction& to_proper()
+	{
+		//перевод в правильную дробь:
+		integer += numerator / denominator;
+		numerator %= denominator;
+		return *this;
 	}
 	void print()const
 	{
-		cout << this << ": X = " << x << ",\tY = " << y << endl;
+		if (integer)cout << integer;
+		if (numerator)
+		{
+			if (integer)cout << "(";
+			cout << numerator << "/" << denominator;
+			if (integer)cout << ")";
+		}
+		else if (integer == 0)cout << 0;
+		cout << endl;
 	}
 };
 
-double distance(const Point& A, const Point& B)
+Fraction operator*(Fraction left, Fraction right)
 {
-	//A.set_x(A.get_x() * 100);
-	double x_distance = A.get_x() - B.get_x();
-	double y_distance = A.get_y() - B.get_y();
-	double distance = sqrt(x_distance * x_distance + y_distance * y_distance);
-	return distance;
+	left.to_improper();
+	right.to_improper();
+	/*Fraction result;
+	result.set_numerator(left.get_numerator()*right.get_numerator());
+	result.set_denominator(left.get_denominator()*right.get_denominator());
+	return result;*/
+	/*Fraction result
+	(
+
+		left.get_numerator()*right.get_numerator(),
+		left.get_denominator()*right.get_denominator()
+	);
+	result.to_proper();
+	return result;*/
+	return Fraction
+	(
+		left.get_numerator() * right.get_numerator(),
+		left.get_denominator() * right.get_denominator()
+	).to_proper();
 }
 
-//#define STRUCT_POINT
-//#define DISTANCE_CHECK
 //#define CONSTRUCTORS_CHECK
 
 void main()
 {
 	setlocale(LC_ALL, "");
 
-#ifdef STRUCT_POINT
-	int a;		//Объявление переменной 'a' типа 'int';
-	Point A;	//Объявление переменной 'A' типа 'Point';
-	//Создание объекта 'A' структуры 'Point';
-	//Создание экземпляра 'A' структуры 'Point';
-	//'A' is instance of struct 'Point'
-	//Instantiate - создать объект.
-	A.x = 2;
-	A.y = 3;
-	cout << A.x << "\t" << A.y << endl;
-
-	Point* pA = &A;
-	cout << pA->x << "\t" << pA->y << endl;
-#endif // STRUCT_POINT
-
-#ifdef DISTANCE_CHECK
-	Point A;
-	A.set_x(2);
-	A.set_y(3);
-	cout << A.get_x() << "\t" << A.get_y() << endl;
-
-	Point B;
-	B.set_x(7);
-	B.set_y(8);
-	cout << B.get_x() << "\t" << B.get_y() << endl;
-	cout << delimiter << endl;
-	cout << "Расстояние от точки 'A' до точки 'B':" << A.distance(B) << endl;
-	cout << delimiter << endl;
-	cout << "Расстояние от точки 'B' до точки 'A':" << B.distance(A) << endl;
-	cout << delimiter << endl;
-	cout << "Расстояние между точками 'A' и 'B':  " << distance(A, B) << endl;
-	cout << delimiter << endl;
-	cout << "Расстояние между точками 'B' и 'A':  " << distance(B, A) << endl;
-	cout << delimiter << endl;
-	cout << sizeof(Point) << endl;
-#endif // DISTANCE_CHECK
-
-	/*for (int i = 0; i < 10; i++)
-	{
-		cout << i << "\t";
-	}
-	cout << endl;*/
-
 #ifdef CONSTRUCTORS_CHECK
-	Point A;		//Здесь мы просто создаем объект, и для этого неявно вызывается конструктор по умолчанию
+	Fraction A;		//Default constructor
 	A.print();
-	//{
-	//	//Point A;
-	//	Point B;
-	//	cout << "Point B существует" << endl;
-	//	B.distance(A);
-	//}
-	//cout << "Здесь Point B уже НЕ существует" << endl;
 
-	Point B = 5;	//Single-argument constructor - Конструктор с одним параметром
+	Fraction B = 5;//Single-Argument constructor
 	B.print();
 
-	Point C(7, 8);	//
+	Fraction C(1, 2);
 	C.print();
 
-	Point D = C;	//Copy constructor
+	Fraction D(2, 3, 4);
 	D.print();
-
-	Point E;		//Default constructor
-	E = D;			//Assignment operator
-	E.print();
 
 #endif // CONSTRUCTORS_CHECK
 
-	int a, b, c;
+	double a = 2.7;
+	double b = 3.14;
+	double c = a * b;
 
-	a = b = c = 0;
-
-	cout << a << "\t" << b << "\t" << c << endl;
-
-	Point A, B, C;
-	cout << delimiter << endl;
-	A = B = C = Point(2, 3);
-	//Point(2,3) - здесь мы явно вызываем конструктор, и создаем временный безымянный объект
-	cout << delimiter << endl;
+	Fraction A(1, 2, 3);
 	A.print();
+	Fraction B(2, 3, 4);
 	B.print();
+
+	Fraction C = A * B;
 	C.print();
 }
