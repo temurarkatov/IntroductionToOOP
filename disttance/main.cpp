@@ -1,140 +1,98 @@
 ﻿#include<iostream>
 using namespace std;
+using std::cin;
+using std::cout;
+using std::endl;
 
-class Fraction
+#define delimiter "\n-----------------------------------------\n"
+
+class String
 {
-	int integer;		//Целая часть
-	int numerator;		//Числитель
-	int denominator;	//Знаменатель
+	int size;	//размер строки в Байтах (с учетом NULL-Terminator)
+	char* str;	//адрес строки в динамической памяти
 public:
-	int get_integer()const
+	int get_size()const
 	{
-		return integer;
+		return size;
 	}
-	int get_numerator()const
+	const char* get_str()const
 	{
-		return numerator;
+		return str;
 	}
-	int get_denominator()const
+	char* get_str()
 	{
-		return denominator;
-	}
-	void set_integer(int integer)
-	{
-		this->integer = integer;
-	}
-	void set_numerator(int numerator)
-	{
-		this->numerator = numerator;
-	}
-	void set_denominator(int denominator)
-	{
-		if (denominator == 0)denominator = 1;
-		this->denominator = denominator;
+		return str;
 	}
 
-	//				Constructors:
-	Fraction()
+	//			Constructors:
+	explicit String(int size = 80)
 	{
-		this->integer = 0;
-		this->numerator = 0;
-		this->denominator = 1;
+		//Конструктор по умолчанию создает пустую строку размером 80 Байт
+		this->size = size;
+		this->str = new char[size] {};
 		cout << "DefaultConstructor:\t" << this << endl;
 	}
-	Fraction(int integer)
+	String(const char* str)
 	{
-		this->integer = integer;
-		this->numerator = 0;
-		this->denominator = 1;
-		cout << "SingleArgumentConstructor:" << this << endl;
-	}
-	Fraction(int numerator, int denominator)
-	{
-		this->integer = 0;
-		this->numerator = numerator;
-		set_denominator(denominator);
+		this->size = strlen(str) + 1;	//strlen() возвращает размер строки в символах, +1 нужен чтобы выделилась память под NULL-Terminator
+		this->str = new char[size] {};
+		for (int i = 0; i < size; i++)this->str[i] = str[i];
 		cout << "Constructor:\t\t" << this << endl;
 	}
-	Fraction(int integer, int numerator, int denominator)
+	//CopyConstructor,CopyAssignment DeepCopy
+	//Shallow copy - поверхностное копирование
+	String(const String& other)
 	{
-		this->integer = integer;
-		this->numerator = numerator;
-		this->set_denominator(denominator);
-		cout << "Constructor:\t\t" << this << endl;
-	}
-	Fraction(const Fraction& other)
-	{
-		this->integer = other.integer;
-		this->numerator = other.numerator;
-		this->denominator = other.denominator;
+		//this->str = other.str;	//Shallow copy
+		/// ------------------------------------------------ ///
+		//Deep copy:
+		this->size = other.size;
+		this->str = new char[size] {};
+		for (int i = 0; i < size; i++)
+			this->str[i] = other.str[i];
+
 		cout << "CopyConstructor:\t" << this << endl;
 	}
-	~Fraction()
+	~String()
 	{
+		delete[] str;
+		str = nullptr;
+		size = 0;
 		cout << "Destructor:\t\t" << this << endl;
+		/*
+		-----------------------------------
+		Ошибка на этапе выполнения 'Debug Assertion Failed'
+		возникает когда оператор delete[] выполняется 2 раза
+		по одному адресу либо, оператору delete[] был передан
+		адрес статической памяти.
+		-----------------------------------
+		*/
 	}
 
-	//					Operators:
-	Fraction& operator=(const Fraction& other)
-	{
-		this->integer = other.integer;
-		this->numerator = other.numerator;
-		this->denominator = other.denominator;
-		cout << "CopyAssignment:\t" << this << endl;
-		return *this;
-	}
-
-
-	//					 Methods:
-	Fraction& to_improper()
-	{
-		//перевод в неправильную дробь:
-		numerator += integer * denominator;
-		integer = 0;
-		return *this;
-	}
-	Fraction& to_proper()
-	{
-		//перевод в правильную дробь:
-		integer += numerator / denominator;
-		numerator %= denominator;
-		return *this;
-	}
+	//				Methods:
 	void print()const
 	{
-		if (integer)cout << integer;
-		if (numerator)
-		{
-			if (integer)cout << "(";
-			cout << numerator << "/" << denominator;
-			if (integer)cout << ")";
-		}
-		else if (integer == 0)cout << 0;
-		cout << endl;
+		cout << "Size:\t" << size << endl;
+		cout << "Str:\t" << str << endl;
 	}
 };
-
-Fraction operator*(Fraction left, Fraction right)
+String operator+(const String& left, const String& right)
 {
-	left.to_improper();
-	right.to_improper();
-	/*Fraction result;
-	result.set_numerator(left.get_numerator()*right.get_numerator());
-	result.set_denominator(left.get_denominator()*right.get_denominator());
-	return result;*/
-	/*Fraction result
-	(
+	String result(left.get_size() + right.get_size() - 1);
+	for (int i = 0; i < left.get_size(); i++)
+		result.get_str()[i] = left.get_str()[i];
+	for (int i = 0; i < right.get_size(); i++)
+		result.get_str()[i + left.get_size() - 1] = right.get_str()[i];
+	return result;
+}
+std::ostream& operator<<(std::ostream& os, const String& obj)
+{
+	return os << obj.get_str();
+}
 
-		left.get_numerator()*right.get_numerator(),
-		left.get_denominator()*right.get_denominator()
-	);
-	result.to_proper();
-	return result;*/
-	return Fraction
-	(
-		left.get_numerator() * right.get_numerator(),
-		left.get_denominator() * right.get_denominator()
-	).to_proper();
+void Clear(char* str)
+{
+	delete[] str;
 }
 
 //#define CONSTRUCTORS_CHECK
@@ -144,29 +102,38 @@ void main()
 	setlocale(LC_ALL, "");
 
 #ifdef CONSTRUCTORS_CHECK
-	Fraction A;		//Default constructor
-	A.print();
+	String str1;
+	str1.print();
 
-	Fraction B = 5;//Single-Argument constructor
-	B.print();
+	String str2(5);	//Conversion from 'int' to 'String'
+	str2.print();
 
-	Fraction C(1, 2);
-	C.print();
+	String str3 = "Hello";
+	str3.print();
+	cout << str3 << endl;
 
-	Fraction D(2, 3, 4);
-	D.print();
+	String str4 = "World";
+	cout << str4 << endl;
 
+	cout << delimiter << endl;
+	String str5 = str3 + str4;
+	cout << delimiter << endl;
+	cout << str5 << endl;
 #endif // CONSTRUCTORS_CHECK
 
-	double a = 2.7;
-	double b = 3.14;
-	double c = a * b;
+	String str1 = "Hello";
+	cout << str1 << endl;
 
-	Fraction A(1, 2, 3);
-	A.print();
-	Fraction B(2, 3, 4);
-	B.print();
+	String str2 = str1;
+	cout << str2 << endl;
 
-	Fraction C = A * B;
-	C.print();
+
+
+	/*char* str = new char[8]{ "Hello" };
+	cout << str << endl;
+	Clear(str);
+	Clear(str);*/
+	//delete[] str;
+	/*int arr[] = { 3,5,8,13,21 };
+	delete[] arr;*/
 }
